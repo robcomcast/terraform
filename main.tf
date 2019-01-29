@@ -84,6 +84,8 @@ resource "aws_elb" "example" {
 
 resource "aws_security_group" "elb" {
 
+    name                = "terraform-example-elb"
+    
     ingress {
         from_port       = 80
         to_port         = 80
