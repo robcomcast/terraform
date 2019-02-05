@@ -1,9 +1,18 @@
+terraform {
+    backend "s3" {
+        bucket  = "com-rlbenterprisesllc-terraform-state"
+        key     = "global/s3/terraform.tfstate"
+        region  = "us-east-1"
+        encrypt = true
+    }
+}
+
 provider "aws" {
   region = "us-east-1"
 }
 
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "terraform-up-and-running-state"
+  bucket = "com-rlbenterprisesllc-terraform-state"
 
   versioning {
       enabled = true
@@ -13,4 +22,6 @@ resource "aws_s3_bucket" "terraform_state" {
       prevent_destroy = true
   }
 }
-
+output "s3_bucket_arn" {
+  value = "${aws_s3_bucket.terraform_state.arn}"
+}
