@@ -4,7 +4,7 @@ provider "aws" {
 
 terraform {
     backend "s3" {
-        bucket  = "com-rlbenterprisesllc-terraform-state"
+        bucket  = "cap-sre-configs"
         key     = "stage/data-stores/mysql/terraform.tfstate"
         region  = "us-east-1"
         encrypt = true

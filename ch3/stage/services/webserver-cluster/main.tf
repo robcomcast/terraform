@@ -4,11 +4,24 @@ provider "aws" {
 
 terraform {
     backend "s3" {
-        bucket  = "com-rlbenterprisesllc-terraform-state"
-        key     = "stege/services/webserver-cluster/terraform.tfstate"
+        bucket  = "cap-sre-configs"
+        key     = "stage/services/webserver-cluster/terraform.tfstate"
         region  = "us-east-1"
         encrypt = true
     }
+}
+
+data "terraform_remote_state" "db" {
+    backend = "s3"
+
+    config {
+        bucket = "cap-sre-configs"
+        key    = "stage/data-stores/mysql/terraform.tfstate"
+        region = "us-east-1"
+    }
+}
+data "aws_availability_zones" "all" {
+  
 }
 
 resource "aws_launch_configuration" "example" {
@@ -18,7 +31,9 @@ resource "aws_launch_configuration" "example" {
 
     user_data       = <<-EOF
                      #!/bin/sh
-                     echo "Hello, World!" > index.html
+                     echo "Hello, World! 👍🏽" > index.html
+                     echo "DB address: ${data.terraform_remote_state.db.address}" >> index.html
+                     echo "DB port: ${data.terraform_remote_state.db.port}" >> index.html
                      nohup busybox httpd -f -p "${var.server_port}" &
                      EOF
 
@@ -58,10 +73,6 @@ resource "aws_autoscaling_group" "example" {
         value                   = "terraform-asg-example"
         propagate_at_launch     = true
     }
-  
-}
-
-data "aws_availability_zones" "all" {
   
 }
 
