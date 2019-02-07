@@ -1,7 +1,7 @@
 terraform {
     backend "s3" {
-        bucket  = "cap-sre-configs"
-        key     = "stage/services/webserver-cluster/terraform.tfstate"
+        bucket  = "${var.cluster_remote_state_bucket}"
+        key     = "${var.cluster_remote_state_key}"
         region  = "us-east-1"
         encrypt = true
     }
@@ -35,15 +35,6 @@ resource "aws_launch_configuration" "example" {
     instance_type                =   "t2.micro"
     security_groups              =   [ "${aws_security_group.instance.id}" ]
     user_data                    =  "${data.template_file.user_data.rendered}"
-
-    # user_data       = <<-EOF
-    #                  #!/bin/sh
-    #                  echo "Hello, World! 👍🏽" > index.html
-    #                  echo "DB address: ${data.terraform_remote_state.db.address}" >> index.html
-    #                  echo "DB port: ${data.terraform_remote_state.db.port}" >> index.html
-    #                  nohup busybox httpd -f -p "${var.server_port}" &
-    #                  EOF
-
 
     lifecycle {
         create_before_destroy = true

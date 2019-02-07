@@ -4,4 +4,10 @@ provider "aws" {
 
 module "webserver_cluster" {
     source = "../../../modules/services/webserver-cluster"
+
+    cluster_name                =   "webservers-stage"
+    cluster_remote_state_bucket =   "cap-sre-configs"
+    cluster_remote_state_key    =   "stage/services/webserver-cluster/terraform.tfstate"
+    db_remote_state_bucket      =   "cap-sre-configs"
+    db_remote_state_key         =   "stage/data-stores/mysql/terraform.tfstate"
 }
