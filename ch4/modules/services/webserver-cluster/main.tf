@@ -1,7 +1,3 @@
-provider "aws" {
-    region = "us-east-1"
-}
-
 terraform {
     backend "s3" {
         bucket  = "cap-sre-configs"
@@ -15,8 +11,8 @@ data "terraform_remote_state" "db" {
     backend = "s3"
 
     config {
-        bucket = "cap-sre-configs"
-        key    = "stage/data-stores/mysql/terraform.tfstate"
+        bucket = "${var.db_remote_state_bucket}"
+        key    = "${var.db_remote_state_key}"
         region = "us-east-1"
     }
 }
@@ -55,7 +51,7 @@ resource "aws_launch_configuration" "example" {
 }
 
 resource "aws_security_group" "instance" {
-    name = "terraform-example-instance"
+    name = "${var.cluster_name}-instance"
 
     ingress {
         from_port   = "${var.server_port}"
@@ -83,14 +79,14 @@ resource "aws_autoscaling_group" "example" {
 
     tag {
         key                     = "Name"
-        value                   = "terraform-asg-example"
+        value                   = "${var.cluster_name}-example"
         propagate_at_launch     = true
     }
   
 }
 
 resource "aws_elb" "example" {
-    name                = "terraform-asg-example"
+    name                = "${var.cluster_name}-example"
     availability_zones  = ["${data.aws_availability_zones.all.names}"]
     security_groups     = [ "${aws_security_group.elb.id}" ]
 
@@ -111,7 +107,7 @@ resource "aws_elb" "example" {
 }
 
 resource "aws_security_group" "elb" {
-    name = "terraform-example-elb"
+    name = "${var.cluster_name}-elb"
     ingress {
         from_port       = 80
         to_port         = 80
