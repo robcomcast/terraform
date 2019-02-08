@@ -1,7 +1,7 @@
 terraform {
     backend "s3" {
-        bucket  = "${var.cluster_remote_state_bucket}"
-        key     = "${var.cluster_remote_state_key}"
+        bucket  = "cap-sre-configs"
+        key     = "prod/services/webserver-cluster/terraform.tfstate"
         region  = "us-east-1"
         encrypt = true
     }
@@ -21,7 +21,7 @@ data "aws_availability_zones" "all" {
 }
 
 data "template_file" "user_data" {
-    template = "${file("user-data.sh")}"
+    template = "${file("${path.module}/user-data.sh")}"
 
     vars {
         server_port     = "${var.server_port}"

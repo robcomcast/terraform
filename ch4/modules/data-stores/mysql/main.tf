@@ -1,7 +1,7 @@
 terraform {
     backend "s3" {
-        bucket  = "${var.db_remote_state_bucket}"
-        key     = "${var.db_remote_state_key}"
+        bucket  = "cap-sre-configs"
+        key     = "stage/data-stores/mysql/terraform.tfstate"
         region  = "us-east-1"
         encrypt = true
     }

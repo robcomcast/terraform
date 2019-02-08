@@ -7,5 +7,5 @@ module "mysql" {
   
     db_remote_state_bucket      =   "cap-sre-configs"
     db_remote_state_key         =   "stage/data-stores/mysql/terraform.tfstate"
- 
+    db_password                 =   "db_password" # Ansible here!
 }
