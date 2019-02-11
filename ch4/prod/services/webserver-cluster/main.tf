@@ -12,7 +12,7 @@ terraform {
 }
 
 module "webserver_cluster" {
-    source = "git::git@github.com:robcomcast/terraform_modules.git//services/webserver-cluster?ref=v0.2.1"
+    source = "git::git@github.com:robcomcast/terraform_modules.git//services/webserver-cluster?ref=v0.2.2"
 
     cluster_name                =   "webservers-prod"
 

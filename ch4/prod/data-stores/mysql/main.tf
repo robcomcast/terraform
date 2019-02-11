@@ -12,7 +12,7 @@ terraform {
 }
 
 module "mysql" {
-    source = "git::git@github.com:robcomcast/terraform_modules.git//data-stores/mysql?ref=v0.2.1"
+    source = "git::git@github.com:robcomcast/terraform_modules.git//data-stores/mysql?ref=v0.2.2"
   
       db_password                 =   "db_password" # Vault!
 }
